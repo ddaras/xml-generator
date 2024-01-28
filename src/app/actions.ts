@@ -33,7 +33,8 @@ async function saveFile(file: File) {
 
 export async function parseFile() {
   try {
-    const workSheetsFromFile = xlsx.parse(path.join(`./public/doc.xlsx`));
+    const filePath = path.resolve(process.cwd(), "public", "doc.xlsx");
+    const workSheetsFromFile = xlsx.parse(path.join(filePath));
 
     const items = workSheetsFromFile[0].data;
 
