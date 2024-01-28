@@ -8,12 +8,12 @@ import { twMerge } from "tailwind-merge";
 import clsx from "clsx";
 import { Button } from "./ui/button";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import { useQuery } from "react-query";
+import { parseFile } from "@/app/actions";
 
 export function GeneratorScreen({
-  data,
   uploadFile,
 }: {
-  data: { items: any[][]; count: number };
   uploadFile: (
     prevState: any,
     formData: FormData
@@ -21,6 +21,11 @@ export function GeneratorScreen({
     message: string;
   }>;
 }) {
+  const { refetch, data = { items: [], count: 0 } } = useQuery<{
+    items: any[][];
+    count: number;
+  }>(["previewData"], () => parseFile());
+
   const [currentSection, setCurrentSection] = React.useState(0); // 0 - upload, 1 - download
 
   const commonClassnames =
@@ -38,6 +43,7 @@ export function GeneratorScreen({
         <UploadForm
           uploadFile={uploadFile}
           onSuccess={() => {
+            refetch();
             setCurrentSection(1);
           }}
         />

@@ -4,7 +4,16 @@ import React from "react";
 import { UploadButton } from "./upload-button";
 import { useFormState } from "react-dom";
 import { useToast } from "./ui/use-toast";
-import { Badge } from "./ui/badge";
+import {
+  TableCaption,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Table,
+} from "./ui/table";
+import { PREVIEW_TABLE_COLUMNS } from "@/constants";
+import { twMerge } from "tailwind-merge";
+import clsx from "clsx";
 
 const initialState = {
   message: "",
@@ -55,9 +64,29 @@ export function UploadForm({
           data-br=":ruc:"
           data-brr="1"
         >
-          ექსელის ფაილის ფორმატი უნდა შეესაბამებოდეს შემდეგ სტრუქტურას: J
-          სვეტიდან იწყება კოდი და სრულდება P ბრუტო სვეტით.
+          ექსელის ფაილის ფორმატი უნდა შეესაბამებოდეს შემდეგ სტრუქტურას:
         </span>
+
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {PREVIEW_TABLE_COLUMNS.map((col) => (
+                <TableHead
+                  key={col.idx}
+                  className={twMerge(
+                    clsx(
+                      "",
+                      { "text-right": col?.align === "right" },
+                      { "text-center": col?.align === "center" }
+                    )
+                  )}
+                >
+                  {(col.idx + 10).toString(36).toUpperCase()} - {col.title}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+        </Table>
 
         <input
           ref={inputRef}

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -10,14 +12,16 @@ import {
 import { DownloadForm } from "./download-form";
 import { twMerge } from "tailwind-merge";
 import clsx from "clsx";
-import { buildXML } from "@/app/actions";
 
 export function PreviewTable({
-  columns,
   data,
+  columns,
 }: {
+  data: {
+    items: any[][];
+    count: number;
+  };
   columns: { idx: number; title: string; align?: string }[];
-  data: { items: any[][]; count: number };
 }) {
   return (
     <div className="w-8/12 my-4">
@@ -32,7 +36,6 @@ export function PreviewTable({
       <div className="relative h-[400px] rounded-lg overflow-hidden">
         <div className="w-full h-full opacity-50 bg-slate-200 dark:bg-slate-900">
           <Table>
-            <TableCaption>Preview</TableCaption>
             <TableHeader>
               <TableRow>
                 {columns.map((col) => (
@@ -76,9 +79,11 @@ export function PreviewTable({
 
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-slate-950"></div>
 
-        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 shadow-2xl">
-          <DownloadForm data={data} />
-        </div>
+        {data.count > 0 && (
+          <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 shadow-2xl">
+            <DownloadForm data={data} />
+          </div>
+        )}
       </div>
     </div>
   );

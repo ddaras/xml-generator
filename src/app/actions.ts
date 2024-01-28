@@ -33,9 +33,9 @@ export async function parseFile() {
   try {
     const workSheetsFromFile = xlsx.parse(path.join(`./public/doc.xlsx`));
 
-    const items = workSheetsFromFile[1].data.slice(1);
+    const items = workSheetsFromFile[0].data;
 
-    return { items: items.slice(0, 100), count: items.length };
+    return { items: items.slice(0, 40), count: items.length };
   } catch (err) {
     return { items: [], count: 0 };
   }
@@ -908,6 +908,10 @@ export async function buildXML(data: { items: any[][]; count: number }) {
   `;
 
   data.items.map((item) => {
+    const countryCode =
+      item[
+        PREVIEW_TABLE_COLUMNS.find((x) => x.key === "countryCode")?.idx || 0
+      ];
     const code = item[
       PREVIEW_TABLE_COLUMNS.find((x) => x.key === "code")?.idx || 0
     ].replaceAll(" ", "");
@@ -1008,8 +1012,8 @@ export async function buildXML(data: { items: any[][]; count: number }) {
         </A.I._code>
       </Tarification>
       <Goods_description>
-        <Country_of_origin_code>646</Country_of_origin_code>
-        <Country_of_origin_region>RW</Country_of_origin_region>
+        <Country_of_origin_code>${countryCode}</Country_of_origin_code>
+        <Country_of_origin_region></Country_of_origin_region>
         <Description_of_goods>${title}</Description_of_goods>
         <Commercial_Description>
           <null/>
