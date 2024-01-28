@@ -12,25 +12,25 @@ export function DownloadForm({
 }: {
   data: { items: any[][]; count: number };
 }) {
-  const handleDownload = () => {
+  const handleDownload = (url: string) => {
     var pom = document.createElement("a");
     pom.setAttribute("download", `doc-${Date.now()}.xml`);
 
     pom.dataset.downloadurl = ["text/plain", pom.download, pom.href].join(":");
     pom.draggable = true;
     pom.classList.add("dragout");
-    pom.setAttribute("href", "/doc.xml");
+    pom.setAttribute("href", url);
     pom.click();
   };
 
   const { mutate, isLoading } = useMutation(["buildXML"], buildXML, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast({
         title: "ფაილი წარმატებით ჩამოიტვირთა! 🥳",
         variant: "default",
       });
 
-      handleDownload();
+      handleDownload(data ? data.url : "");
       // window.open("/doc.xml");
     },
     onError: () => {

@@ -1,4 +1,7 @@
 "use server";
+
+import { put, list, del } from "@vercel/blob";
+
 import { PREVIEW_TABLE_COLUMNS } from "@/constants";
 import fs from "fs";
 import xlsx from "node-xlsx";
@@ -20,21 +23,32 @@ export async function uploadFile(prevState: any, formData: FormData) {
 async function saveFile(file: File) {
   const data = await file.arrayBuffer();
 
-  const filePath = path.join(process.cwd(), "public", "doc.xlsx");
+  const blobList = await list();
 
-  await fs.appendFile(filePath, Buffer.from(data), (err) => {
-    console.log(err);
+  blobList.blobs.map((blob) => {
+    del(blob.url);
   });
 
-  parseFile();
+  const blob = await put("doc.xlsx", data, {
+    access: "public",
+  });
 
-  return;
+  return blob;
 }
 
 export async function parseFile() {
   try {
-    const filePath = path.join(process.cwd(), "public", "doc.xlsx");
-    const workSheetsFromFile = xlsx.parse(filePath);
+    const blobList = await list();
+
+    const blobUrl =
+      blobList.blobs.find((x) => x.pathname.includes(".xlsx"))?.url ||
+      "unknown";
+
+    const res = await fetch(blobUrl);
+
+    const resArrayBuffer = await res.arrayBuffer();
+
+    const workSheetsFromFile = xlsx.parse(resArrayBuffer);
 
     const items = workSheetsFromFile[0].data;
 
@@ -1249,12 +1263,18 @@ export async function buildXML(data: { items: any[][]; count: number }) {
   const xml = doc.end({ prettyPrint: true });
 
   try {
-    const filePath = path.join(process.cwd(), "public", "doc.xml");
+    const blobList = await list();
 
-    fs.unlink(filePath, () => {});
-
-    fs.appendFile(filePath, xml, (err) => {
-      console.log(err);
+    blobList.blobs.map((blob) => {
+      if (blob.pathname.includes(".xml")) {
+        del(blob.url);
+      }
     });
+
+    const blob = await put("doc.xml", xml, {
+      access: "public",
+    });
+
+    return blob;
   } catch (err) {}
 }
