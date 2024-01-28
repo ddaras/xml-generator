@@ -20,7 +20,7 @@ export async function uploadFile(prevState: any, formData: FormData) {
 async function saveFile(file: File) {
   const data = await file.arrayBuffer();
 
-  const filePath = path.resolve(process.cwd(), "public", "doc.xlsx");
+  const filePath = path.join(process.cwd(), "public", "doc.xlsx");
 
   await fs.appendFile(filePath, Buffer.from(data), (err) => {
     console.log(err);
@@ -33,8 +33,8 @@ async function saveFile(file: File) {
 
 export async function parseFile() {
   try {
-    const filePath = path.resolve(process.cwd(), "public", "doc.xlsx");
-    const workSheetsFromFile = xlsx.parse(path.join(filePath));
+    const filePath = path.join(process.cwd(), "public", "doc.xlsx");
+    const workSheetsFromFile = xlsx.parse(filePath);
 
     const items = workSheetsFromFile[0].data;
 
@@ -1249,7 +1249,7 @@ export async function buildXML(data: { items: any[][]; count: number }) {
   const xml = doc.end({ prettyPrint: true });
 
   try {
-    const filePath = path.resolve(process.cwd(), "public", "doc.xml");
+    const filePath = path.join(process.cwd(), "public", "doc.xml");
 
     fs.unlink(filePath, () => {});
 
