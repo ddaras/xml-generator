@@ -50,7 +50,7 @@ export async function parseFile() {
 
     const workSheetsFromFile = xlsx.parse(resArrayBuffer);
 
-    const items = workSheetsFromFile[0].data;
+    const items = workSheetsFromFile[0].data.slice(1);
 
     return { items: items.slice(0, 40), count: items.length };
   } catch (err) {

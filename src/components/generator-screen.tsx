@@ -21,7 +21,11 @@ export function GeneratorScreen({
     message: string;
   }>;
 }) {
-  const { refetch, data = { items: [], count: 0 } } = useQuery<{
+  const {
+    refetch,
+    data = { items: [], count: 0 },
+    isLoading,
+  } = useQuery<{
     items: any[][];
     count: number;
   }>(["previewData"], () => parseFile());
@@ -74,7 +78,11 @@ export function GeneratorScreen({
           <ArrowUp className="mr-2 h-4 w-4" /> ატვირთე ახალი ფაილი
         </Button>
 
-        <PreviewTable columns={PREVIEW_TABLE_COLUMNS} data={data} />
+        <PreviewTable
+          isLoading={isLoading}
+          columns={PREVIEW_TABLE_COLUMNS}
+          data={data}
+        />
       </div>
     </section>
   );

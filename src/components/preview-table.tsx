@@ -16,13 +16,17 @@ import clsx from "clsx";
 export function PreviewTable({
   data,
   columns,
+  isLoading,
 }: {
   data: {
     items: any[][];
     count: number;
   };
   columns: { idx: number; title: string; align?: string }[];
+  isLoading?: boolean;
 }) {
+  if (isLoading) return <>Loading...</>;
+
   return (
     <div className="w-8/12 my-4">
       <h1 className="text-center text-2xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
