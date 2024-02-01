@@ -936,8 +936,6 @@ export async function buildXML(data: { items: any[][]; count: number }) {
       item[PREVIEW_TABLE_COLUMNS.find((x) => x.key === "title")?.idx || 0];
     const qty =
       item[PREVIEW_TABLE_COLUMNS.find((x) => x.key === "qty")?.idx || 0];
-    const price =
-      item[PREVIEW_TABLE_COLUMNS.find((x) => x.key === "price")?.idx || 0];
     const amount =
       item[PREVIEW_TABLE_COLUMNS.find((x) => x.key === "amount")?.idx || 0];
     const netto =

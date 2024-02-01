@@ -8,7 +8,7 @@ export function Header() {
         <span className="hidden font-bold sm:inline-block">
           .xml გენერატორი
         </span>
-        <Badge variant="secondary">ვერსია v1.0</Badge>
+        <Badge variant="secondary">ვერსია v1.1</Badge>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
             <ModeToggle />
