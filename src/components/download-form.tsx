@@ -4,13 +4,13 @@ import React from "react";
 import { useToast } from "./ui/use-toast";
 import { Button } from "./ui/button";
 import { DownloadIcon } from "@radix-ui/react-icons";
-import { buildXML } from "@/app/actions";
+import { IItem, buildXML } from "@/app/actions";
 import { useMutation } from "react-query";
 
 export function DownloadForm({
   data,
 }: {
-  data: { items: any[][]; count: number };
+  data: { items: IItem[]; count: number };
 }) {
   const handleDownload = (url: string) => {
     var pom = document.createElement("a");

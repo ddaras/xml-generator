@@ -12,6 +12,7 @@ import {
 import { DownloadForm } from "./download-form";
 import { twMerge } from "tailwind-merge";
 import clsx from "clsx";
+import { IItem } from "@/app/actions";
 
 export function PreviewTable({
   data,
@@ -19,10 +20,10 @@ export function PreviewTable({
   isLoading,
 }: {
   data: {
-    items: any[][];
+    items: IItem[];
     count: number;
   };
-  columns: { idx: number; title: string; align?: string }[];
+  columns: { idx: number; key: string; title: string; align?: string }[];
   isLoading?: boolean;
 }) {
   if (isLoading) return <>Loading...</>;
@@ -61,20 +62,37 @@ export function PreviewTable({
             <TableBody>
               {data.items.map((item, idx) => (
                 <TableRow key={idx}>
-                  {columns.map((col) => (
-                    <TableCell
-                      key={idx + col.idx}
-                      className={twMerge(
-                        clsx(
-                          "",
-                          { "text-right": col?.align === "right" },
-                          { "text-center": col?.align === "center" }
-                        )
-                      )}
-                    >
-                      {item[col.idx]}
-                    </TableCell>
-                  ))}
+                  {Object.keys(item).map((col) => {
+                    // @ts-ignore
+                    let value = item[col];
+
+                    const isNumber =
+                      col === "total_qty" && typeof value === "number";
+                    const isFloat =
+                      ["total_brutto", "total_netto", "sum_price"].includes(
+                        col
+                      ) && typeof value === "number";
+
+                    if (isFloat) value = value.toFixed(2);
+                    if (isNumber) value = value.toFixed(0);
+
+                    return (
+                      <TableCell
+                        key={col}
+                        className={twMerge(
+                          clsx(
+                            "",
+                            {
+                              "text-right": isFloat,
+                            },
+                            { "text-center": isNumber }
+                          )
+                        )}
+                      >
+                        {value}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))}
             </TableBody>

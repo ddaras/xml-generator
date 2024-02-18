@@ -50,15 +50,80 @@ export async function parseFile() {
 
     const workSheetsFromFile = xlsx.parse(resArrayBuffer);
 
-    const items = workSheetsFromFile[0].data.slice(1);
+    const items = workSheetsFromFile[1].data.slice(1);
 
-    return { items: items.slice(0, 40), count: items.length };
+    const groupedData = groupByCodeCountryCodeTitle(items);
+    const groupedDataList = Object.values(groupedData);
+
+    return { items: groupedDataList, count: groupedDataList.length };
   } catch (err) {
     return { items: [], count: 0 };
   }
 }
 
-export async function buildXML(data: { items: any[][]; count: number }) {
+export interface IItem {
+  code: string;
+  country_code: string;
+  title: string;
+  total_qty: number;
+  total_brutto: number;
+  total_netto: number;
+  sum_price: number;
+}
+
+function groupByCodeCountryCodeTitle(data: any[][]): Record<string, IItem> {
+  // Sort data by code first
+  const sortedData = data.sort((a, b) => a[0].localeCompare(b[0]));
+
+  return sortedData.reduce((acc: any, item) => {
+    const country_code =
+      item[
+        PREVIEW_TABLE_COLUMNS.find((x) => x.key === "country_code")?.idx || 0
+      ];
+    const code = item[
+      PREVIEW_TABLE_COLUMNS.find((x) => x.key === "code")?.idx || 0
+    ].replaceAll(" ", "");
+    const title =
+      item[PREVIEW_TABLE_COLUMNS.find((x) => x.key === "title")?.idx || 0];
+    const qty =
+      item[PREVIEW_TABLE_COLUMNS.find((x) => x.key === "total_qty")?.idx || 0];
+    const price =
+      item[PREVIEW_TABLE_COLUMNS.find((x) => x.key === "sum_price")?.idx || 0];
+    const netto =
+      item[
+        PREVIEW_TABLE_COLUMNS.find((x) => x.key === "total_netto")?.idx || 0
+      ];
+    const brutto =
+      item[
+        PREVIEW_TABLE_COLUMNS.find((x) => x.key === "total_brutto")?.idx || 0
+      ];
+
+    // Sanitize and lowercase elements for groupKey stability
+    const sanitizedCode = String(code).trim().toLowerCase();
+    const sanitizedCountryCode = String(country_code).trim().toLowerCase();
+    const sanitizedTitle = String(title).trim().toLowerCase();
+
+    // Create a more stable groupKey using underscores
+    const groupKey = `${sanitizedCode}_${sanitizedCountryCode}_${sanitizedTitle}`;
+
+    acc[groupKey] = acc[groupKey] || {
+      code,
+      country_code,
+      title,
+      total_qty: 0,
+      total_brutto: 0,
+      total_netto: 0,
+      sum_price: 0.0,
+    };
+    acc[groupKey].total_qty += qty;
+    acc[groupKey].total_brutto += brutto;
+    acc[groupKey].total_netto += netto;
+    acc[groupKey].sum_price += price;
+    return acc;
+  }, {});
+}
+
+export async function buildXML(data: { items: IItem[]; count: number }) {
   // const root = create().ele("ASYCUDA");
 
   // const Assessment_notice = root.ele("Assessment_notice");
@@ -925,23 +990,13 @@ export async function buildXML(data: { items: any[][]; count: number }) {
   `;
 
   data.items.map((item) => {
-    const countryCode =
-      item[
-        PREVIEW_TABLE_COLUMNS.find((x) => x.key === "countryCode")?.idx || 0
-      ];
-    const code = item[
-      PREVIEW_TABLE_COLUMNS.find((x) => x.key === "code")?.idx || 0
-    ].replaceAll(" ", "");
-    const title =
-      item[PREVIEW_TABLE_COLUMNS.find((x) => x.key === "title")?.idx || 0];
-    const qty =
-      item[PREVIEW_TABLE_COLUMNS.find((x) => x.key === "qty")?.idx || 0];
-    const amount =
-      item[PREVIEW_TABLE_COLUMNS.find((x) => x.key === "amount")?.idx || 0];
-    const netto =
-      item[PREVIEW_TABLE_COLUMNS.find((x) => x.key === "netto")?.idx || 0];
-    const brutto =
-      item[PREVIEW_TABLE_COLUMNS.find((x) => x.key === "brutto")?.idx || 0];
+    const countryCode = item["country_code"];
+    const code = item["code"].replaceAll(" ", "");
+    const title = item["title"];
+    const qty = item["total_qty"];
+    const amount = item["sum_price"];
+    const netto = item["total_netto"];
+    const brutto = item["total_brutto"];
 
     xmlStr += /*xml*/ ` 
     <Item>

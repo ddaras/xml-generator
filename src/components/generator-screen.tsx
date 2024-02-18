@@ -9,7 +9,7 @@ import clsx from "clsx";
 import { Button } from "./ui/button";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useQuery } from "react-query";
-import { parseFile } from "@/app/actions";
+import { IItem, parseFile } from "@/app/actions";
 
 export function GeneratorScreen({
   uploadFile,
@@ -26,7 +26,7 @@ export function GeneratorScreen({
     data = { items: [], count: 0 },
     isLoading,
   } = useQuery<{
-    items: any[][];
+    items: IItem[];
     count: number;
   }>(["previewData"], () => parseFile());
 
