@@ -65,7 +65,7 @@ export async function parseFile() {
 export interface IItem {
   code: string;
   country_code: string;
-  title: string;
+  titles: string[];
   total_qty: number;
   total_brutto: number;
   total_netto: number;
@@ -105,7 +105,7 @@ function groupByCodeCountryCodeTitle(data: any[][]): Record<string, IItem> {
     const sanitizedTitle = String(title).trim().toLowerCase();
 
     // Create a more stable groupKey using underscores
-    const groupKey = `${sanitizedCode}_${sanitizedCountryName}_${sanitizedTitle}`;
+    const groupKey = `${sanitizedCode}_${sanitizedCountryName}`;
 
     acc[groupKey] = acc[groupKey] || {
       code,
@@ -113,552 +113,29 @@ function groupByCodeCountryCodeTitle(data: any[][]): Record<string, IItem> {
         COUNTRY_CODES.find(
           (x) => String(x.name).trim().toLowerCase() === sanitizedCountryName
         )?.isoCode || "-",
-      title,
+      titles: [],
       total_qty: 0,
       total_brutto: 0,
       total_netto: 0,
       sum_price: 0.0,
     };
+
+    // Add unique title to group, using Set for efficient duplicates removal
+    const titlesSet = new Set(acc[groupKey].titles);
+    titlesSet.add(sanitizedTitle);
+
+    acc[groupKey].titles = Array.from(titlesSet); // Convert back to array
+
     acc[groupKey].total_qty += qty;
     acc[groupKey].total_brutto += brutto;
     acc[groupKey].total_netto += netto;
     acc[groupKey].sum_price += price;
+
     return acc;
   }, {});
 }
 
 export async function buildXML(data: { items: IItem[]; count: number }) {
-  // const root = create().ele("ASYCUDA");
-
-  // const Assessment_notice = root.ele("Assessment_notice");
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.ele("Item_tax_total").up();
-  // Assessment_notice.up();
-
-  // const Global_taxes = root.ele("Global_taxes");
-  // Global_taxes.ele("Global_tax_item").up();
-  // Global_taxes.ele("Global_tax_item").up();
-  // Global_taxes.ele("Global_tax_item").up();
-  // Global_taxes.ele("Global_tax_item").up();
-  // Global_taxes.ele("Global_tax_item").up();
-  // Global_taxes.ele("Global_tax_item").up();
-  // Global_taxes.ele("Global_tax_item").up();
-  // Global_taxes.ele("Global_tax_item").up();
-  // Global_taxes.up();
-
-  // const Property = root.ele("Property");
-  // Property.ele("Sad_flow").txt("I");
-  // Property.ele("Forms")
-  //   .ele("Number_of_the_form")
-  //   .txt("I")
-  //   .up()
-
-  //   .ele("Total_number_of_forms")
-  //   .txt("25")
-  //   .up()
-
-  //   .up();
-
-  // Property.ele("Nbers")
-  //   .ele("Number_of_loading_lists")
-  //   .up()
-
-  //   .ele("Total_number_of_items")
-  //   .txt("72")
-  //   .up()
-
-  //   .ele("Total_number_of_packages")
-  //   .txt("72")
-  //   .up()
-
-  //   .up();
-  // Property.ele("Place_of_declaration").ele("null").up().up();
-  // Property.ele("Date_of_declaration").up();
-  // Property.ele("Selected_page").txt("1").up();
-  // Property.up();
-
-  // const Identification = root.ele("Identification");
-  // Identification.ele("Office_segment")
-  //   .ele("Customs_clearance_office_code")
-  //   .txt("11111")
-  //   .up()
-
-  //   .ele("Customs_Clearance_office_name")
-  //   .txt("გეზი თბილისი / CCZ Tbilisi")
-  //   .up()
-
-  //   .up();
-  // Identification.ele("Type")
-  //   .ele("Type_of_declaration")
-  //   .txt("იმ")
-  //   .up()
-
-  //   .ele("Declaration_gen_procedure_code")
-  //   .txt("4")
-  //   .up()
-
-  //   .ele("Type_of_transit_document")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-
-  //   .up();
-  // Identification.ele("Manifest_reference_number")
-  //   .ele("null")
-  //   .up()
-
-  //   .up();
-  // Identification.ele("Registration")
-  //   .ele("Serial_number")
-  //   .txt("C")
-  //   .up()
-
-  //   .ele("Number")
-  //   .txt("6659")
-  //   .up()
-
-  //   .ele("Date")
-  //   .txt("1/23/24")
-  //   .up()
-
-  //   .up();
-  // Identification.ele("Assessment")
-  //   .ele("Serial_number")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-
-  //   .ele("Number")
-  //   .up()
-
-  //   .ele("Date")
-  //   .up()
-
-  //   .up();
-  // Identification.ele("receipt")
-  //   .ele("Serial_number")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-
-  //   .ele("Number")
-  //   .up()
-
-  //   .ele("Date")
-  //   .up()
-
-  //   .up();
-  // Identification.up();
-
-  // const Traders = root.ele("Traders");
-  // Traders.ele("Exporter")
-  //   .ele("Exporter_code")
-  //   .ele("null")
-  //   .up()
-
-  //   .ele("Exporter_name")
-  //   .txt("LC WAİKİKİ DIŞ TİCARET ANONİM ŞİRKETİ თურქეთი / TURKEY")
-  //   .up()
-  //   .up()
-
-  //   .up();
-  // Traders.ele("Consignee")
-  //   .ele("Consignee_code")
-  //   .txt("404916114")
-  //   .up()
-
-  //   .ele("Consignee_name")
-  //   .txt(
-  //     "შპს ელსივაიკიკი გე საქართველო, თბილისი, საბურთალოს რაიონი, დიღმის სასწავლო საცდელი მეურნეობის ტერიტორია"
-  //   )
-  //   .up()
-
-  //   .up();
-  // Traders.ele("Financial")
-  //   .ele("Financial_code")
-  //   .txt("404916114")
-  //   .up()
-
-  //   .ele("Financial_name")
-  //   .txt(
-  //     "შპს ელსივაიკიკი გე საქართველო, თბილისი, საბურთალოს რაიონი, დიღმის სასწავლო საცდელი მეურნეობის ტერიტორია"
-  //   )
-  //   .up()
-
-  //   .up();
-  // Traders.up();
-
-  // const Declarant = root.ele("Declarant");
-  // Declarant.ele("Declarant_code").txt("404916114").up();
-  // Declarant.ele("Declarant_name")
-  //   .txt(
-  //     "შპს ელსივაიკიკი გე თბილისი, დიღმის სასწავლო საცდელი მეურნეობის ტერიტორია"
-  //   )
-  //   .up();
-  // Declarant.ele("Declarant_representative").ele("null").up().up();
-  // Declarant.ele("Reference").ele("Number").txt("2").up().up();
-  // Declarant.up();
-
-  // const General_information = root.ele("General_information");
-  // General_information.ele("Country")
-  //   .ele("Country_first_destination")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Trading_country")
-  //   .txt("792")
-  //   .up()
-  //   .ele("Export")
-  //   .ele("Export_country_code")
-  //   .txt("792")
-  //   .up()
-  //   .ele("Export_country_name")
-  //   .txt("თურქეთი / TURKEY")
-  //   .up()
-  //   .ele("Export_country_region")
-  //   .txt("TR")
-  //   .up()
-  //   .up()
-  //   .ele("Destination")
-  //   .ele("Destination_country_code")
-  //   .txt("268")
-  //   .up()
-  //   .ele("Destination_country_name")
-  //   .txt("საქართველო / GEORGIA")
-  //   .up()
-  //   .ele("Destination_country_region")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .up()
-  //   .ele("Country_of_origin_name")
-  //   .txt("MANY")
-  //   .up()
-  //   .up()
-  //   .ele("Value_details")
-  //   .txt("0")
-  //   .up()
-  //   .ele("CAP")
-  //   .txt("1")
-  //   .up()
-  //   .ele("Additional_information")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Comments_free_text")
-  //   .ele("null")
-  //   .up()
-  //   .up();
-  // General_information.up();
-
-  // const Transport = root.ele("Transport");
-  // Transport.ele("Means_of_transport")
-  //   .ele("Departure_arrival_information")
-  //   .ele("Identity")
-  //   .txt("01 ა/მ ნაწ.")
-  //   .up()
-  //   .ele("Nationality")
-  //   .txt("792")
-  //   .up()
-  //   .up()
-  //   .ele("Border_information")
-  //   .ele("Identity")
-  //   .txt("01 ა/მ ნაწ.")
-  //   .up()
-  //   .ele("Nationality")
-  //   .txt("792")
-  //   .up()
-  //   .ele("Mode")
-  //   .txt("32")
-  //   .up()
-  //   .up()
-  //   .ele("Inland_mode_of_transport")
-  //   .txt("32")
-  //   .up()
-  //   .up();
-  // Transport.ele("Container_flag").txt("false").up();
-  // Transport.ele("Delivery_terms")
-  //   .ele("Code")
-  //   .txt("CIP")
-  //   .up()
-  //   .ele("Place")
-  //   .txt("თბილისი")
-  //   .up()
-  //   .ele("Situation")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .up();
-  // Transport.ele("Border_office")
-  //   .ele("Code")
-  //   .txt("69601")
-  //   .up()
-  //   .ele("Name")
-  //   .txt(`სგპ  "სარფი" / BCP "Sarpi"`)
-  //   .up()
-  //   .up();
-  // Transport.ele("Place_of_loading")
-  //   .ele("Code")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Name")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Country")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .up();
-  // Transport.ele("Location_of_goods").txt("SGP99").up();
-  // Transport.up();
-
-  // const Financial = root.ele("Financial");
-  // Financial.ele("Financial_transaction")
-  //   .ele("code1")
-  //   .txt("2")
-  //   .up()
-  //   .ele("code2")
-  //   .txt("1")
-  //   .up()
-  //   .up();
-  // Financial.ele("Bank")
-  //   .ele("Code")
-  //   .txt("0")
-  //   .up()
-  //   .ele("Name")
-  //   .txt(".")
-  //   .up()
-  //   .ele("Branch")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Reference")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .up();
-  // Financial.ele("Terms")
-  //   .ele("Code")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Description")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .up();
-  // Financial.ele("Total_invoice").up();
-  // Financial.ele("Deffered_payment_reference").ele("null").up().up();
-  // Financial.ele("Mode_of_payment").txt("ნაღდი").up();
-  // Financial.ele("Amounts")
-  //   .ele("Total_manual_taxes")
-  //   .up()
-  //   .ele("Global_taxes")
-  //   .txt("0")
-  //   .up()
-  //   .ele("Totals_taxes")
-  //   .txt("1520.5")
-  //   .up()
-  //   .up();
-  // Financial.ele("Guarantee")
-  //   .ele("Name")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Amount")
-  //   .txt("0")
-  //   .up()
-  //   .ele("Date")
-  //   .up()
-  //   .ele("Excluded_country")
-  //   .ele("Code")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Name")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .up()
-  //   .up();
-  // Financial.up();
-
-  // const Warehouse = root.ele("Warehouse");
-  // Warehouse.ele("Identification").ele("null").up().up();
-  // Warehouse.ele("Delay").up();
-  // Warehouse.up();
-
-  // const Transit = root.ele("Transit");
-  // Transit.ele("Principal")
-  //   .ele("Code")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Name")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Representative")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .up();
-  // Transit.ele("Signature")
-  //   .ele("Place")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Date")
-  //   .up()
-  //   .up();
-  // Transit.ele("Destination")
-  //   .ele("Office")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Country")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .up();
-  // Transit.ele("Seals")
-  //   .ele("Number")
-  //   .up()
-  //   .ele("Identity")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .up();
-  // Transit.ele("Result_of_control").ele("null").up().up();
-  // Transit.ele("Time_limit").up();
-  // Transit.ele("Officer_name").ele("null").up().up();
-  // Transit.up();
-
-  // const Valuation = root.ele("Valuation");
-  // Valuation.ele("Calculation_working_mode").txt("1").up();
-  // Valuation.ele("Weight").ele("Gross_weight").txt("177.37").up().up();
-  // Valuation.ele("Total_cost").txt("0").up();
-  // Valuation.ele("Total_CIF").txt("8440.62648").up();
-  // Valuation.ele("Gs_Invoice")
-  //   .ele("Amount_national_currency")
-  //   .txt("8440.62648")
-  //   .up()
-  //   .ele("Amount_foreign_currency")
-  //   .txt("3174.6")
-  //   .up()
-  //   .ele("Currency_code")
-  //   .txt("840")
-  //   .up()
-  //   .ele("Currency_name")
-  //   .txt("No foreign currency")
-  //   .up()
-  //   .ele("Currency_rate")
-  //   .txt("2.6588")
-  //   .up()
-  //   .up();
-  // Valuation.ele("Gs_external_freight")
-  //   .ele("Amount_national_currency")
-  //   .txt("0")
-  //   .up()
-  //   .ele("Amount_foreign_currency")
-  //   .txt("0")
-  //   .up()
-  //   .ele("Currency_code")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Currency_name")
-  //   .txt("No foreign currency")
-  //   .up()
-  //   .ele("Currency_rate")
-  //   .txt("0")
-  //   .up()
-  //   .up();
-  // Valuation.ele("Gs_insurance")
-  //   .ele("Amount_national_currency")
-  //   .txt("0")
-  //   .up()
-  //   .ele("Amount_foreign_currency")
-  //   .txt("0")
-  //   .up()
-  //   .ele("Currency_code")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Currency_name")
-  //   .txt("No foreign currency")
-  //   .up()
-  //   .ele("Currency_rate")
-  //   .txt("0")
-  //   .up()
-  //   .up();
-  // Valuation.ele("Gs_other_cost")
-  //   .ele("Amount_national_currency")
-  //   .txt("0")
-  //   .up()
-  //   .ele("Amount_foreign_currency")
-  //   .txt("0")
-  //   .up()
-  //   .ele("Currency_code")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Currency_name")
-  //   .txt("No foreign currency")
-  //   .up()
-  //   .ele("Currency_rate")
-  //   .txt("0")
-  //   .up()
-  //   .up();
-  // Valuation.ele("Gs_deduction")
-  //   .ele("Amount_national_currency")
-  //   .txt("0")
-  //   .up()
-  //   .ele("Amount_foreign_currency")
-  //   .txt("0")
-  //   .up()
-  //   .ele("Currency_code")
-  //   .ele("null")
-  //   .up()
-  //   .up()
-  //   .ele("Currency_name")
-  //   .txt("No foreign currency")
-  //   .up()
-  //   .ele("Currency_rate")
-  //   .txt("0")
-  //   .up()
-  //   .up();
-  // Valuation.ele("Total")
-  //   .ele("Total_invoice")
-  //   .txt("3174.6")
-  //   .up()
-  //   .ele("Total_weight")
-  //   .txt("177.37")
-  //   .up()
-  //   .up();
-  // Valuation.up();
-
-  // root.com("f(x) = x^2");
-  // for (let i = 1; i <= 5; i++) {
-  //   const item = root.ele("data");
-  //   // item.att("x", i);
-  //   // item.att("y", i * i);
-  // }
-
   let xmlStr = /*xml*/ `
 <ASYCUDA id="5337710">
   <Assessment_notice>
@@ -996,7 +473,7 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
   data.items.map((item) => {
     const countryCode = item["country_code"];
     const code = item["code"].replaceAll(" ", "");
-    const title = item["title"];
+    const titles = item["titles"];
     const qty = item["total_qty"];
     const amount = item["sum_price"];
     const netto = item["total_netto"];
@@ -1087,8 +564,10 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
       </Tarification>
       <Goods_description>
         <Country_of_origin_code>${countryCode}</Country_of_origin_code>
-        <Country_of_origin_region></Country_of_origin_region>
-        <Description_of_goods>${title}</Description_of_goods>
+        <Country_of_origin_region>${
+          COUNTRY_CODES.find((x) => x.isoCode === countryCode)?.code || "-"
+        }</Country_of_origin_region>
+        <Description_of_goods>${titles.join(", ")}</Description_of_goods>
         <Commercial_Description>
           <null/>
         </Commercial_Description>

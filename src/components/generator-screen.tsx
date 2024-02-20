@@ -33,7 +33,7 @@ export function GeneratorScreen({
   const [currentSection, setCurrentSection] = React.useState(0); // 0 - upload, 1 - download
 
   const commonClassnames =
-    "absolute h-full w-full transition-transform ease-linear flex flex-col justify-center items-center";
+    "absolute h-full w-full transition-transform ease-linear flex flex-col justify-center items-center my-12";
 
   return (
     <section className="relative overflow-hidden h-full w-full">

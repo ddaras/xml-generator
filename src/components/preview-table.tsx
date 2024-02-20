@@ -89,7 +89,7 @@ export function PreviewTable({
                           )
                         )}
                       >
-                        {value}
+                        {Array.isArray(value) ? value.join(", ") : value}
                       </TableCell>
                     );
                   })}
