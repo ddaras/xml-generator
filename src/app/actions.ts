@@ -7,6 +7,7 @@ import fs from "fs";
 import xlsx from "node-xlsx";
 import path from "path";
 import { create } from "xmlbuilder2";
+import COUNTRY_CODES from "../lib/country_codes.json";
 
 export async function uploadFile(prevState: any, formData: FormData) {
   const file = formData.get("file") as File;
@@ -100,15 +101,18 @@ function groupByCodeCountryCodeTitle(data: any[][]): Record<string, IItem> {
 
     // Sanitize and lowercase elements for groupKey stability
     const sanitizedCode = String(code).trim().toLowerCase();
-    const sanitizedCountryCode = String(country_code).trim().toLowerCase();
+    const sanitizedCountryName = String(country_code).trim().toLowerCase();
     const sanitizedTitle = String(title).trim().toLowerCase();
 
     // Create a more stable groupKey using underscores
-    const groupKey = `${sanitizedCode}_${sanitizedCountryCode}_${sanitizedTitle}`;
+    const groupKey = `${sanitizedCode}_${sanitizedCountryName}_${sanitizedTitle}`;
 
     acc[groupKey] = acc[groupKey] || {
       code,
-      country_code,
+      country_code:
+        COUNTRY_CODES.find(
+          (x) => String(x.name).trim().toLowerCase() === sanitizedCountryName
+        )?.isoCode || "-",
       title,
       total_qty: 0,
       total_brutto: 0,

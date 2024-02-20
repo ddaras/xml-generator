@@ -1,6 +1,6 @@
 export const PREVIEW_TABLE_COLUMNS = [
   { idx: 0, key: "code", title: "კოდი" },
-  { idx: 1, key: "country_code", title: "ქვეყნის კოდი" },
+  { idx: 1, key: "country_code", title: "ქვეყანა" },
   { idx: 2, key: "title", title: "დასახელება" },
   { idx: 3, key: "total_qty", title: "რაოდ.", align: "center" },
   { idx: 4, key: "total_brutto", title: "ბრუტო", align: "right" },
