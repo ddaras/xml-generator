@@ -563,7 +563,7 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
           <Suppplementary_unit_quantity/>
         </Supplementary_unit>
         <Valuation_method_code>1</Valuation_method_code>
-        <Value_item>0+0.00+0.00+0-0</Value_item>
+        <Value_item />
         <Attached_doc_item>
           <null/>
         </Attached_doc_item>
@@ -736,11 +736,11 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
           <Amount_foreign_currency>${amount.toFixed(
             2
           )}</Amount_foreign_currency>
-          <Currency_code>840</Currency_code>
+          <Currency_code />
           <Currency_name>
             <null/>
           </Currency_name>
-          <Currency_rate></Currency_rate>
+          <Currency_rate>0</Currency_rate>
         </Item_Invoice>
         <item_external_freight>
           <Amount_national_currency/>
