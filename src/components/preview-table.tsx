@@ -22,6 +22,8 @@ export function PreviewTable({
   data: {
     items: IItem[];
     count: number;
+    total_brutto: number;
+    total_price: number;
   };
   columns: { idx: number; key: string; title: string; align?: string }[];
   isLoading?: boolean;
@@ -33,10 +35,23 @@ export function PreviewTable({
       <h1 className="text-center text-2xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
         ატვირთული ფაილის გადახედვა
       </h1>
-      <p className="my-4 text-center text-sm opacity-60">
-        ჩანაწერების რაოდენობა სულ:{" "}
-        <span className="font-bold">{data.count}</span>
-      </p>
+
+      <div className="flex items-center justify-center gap-4">
+        <p className="my-4 text-center text-sm opacity-60">
+          ჩანაწერების რაოდენობა სულ:{" "}
+          <span className="font-bold">{data.count}</span>
+        </p>
+        <p className="my-4 text-center text-sm opacity-60">
+          ბრუტო ჯამში:{" "}
+          <span className="font-bold">
+            {data.total_brutto.toLocaleString()}
+          </span>
+        </p>
+        <p className="my-4 text-center text-sm opacity-60">
+          ღირ. ჯამში:{" "}
+          <span className="font-bold">{data.total_price.toLocaleString()}</span>
+        </p>
+      </div>
 
       <div className="relative h-[400px] rounded-lg overflow-hidden">
         <div className="w-full h-full opacity-50 bg-slate-200 dark:bg-slate-900">

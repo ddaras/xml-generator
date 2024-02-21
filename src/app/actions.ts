@@ -56,9 +56,18 @@ export async function parseFile() {
     const groupedData = groupByCodeCountryCodeTitle(items);
     const groupedDataList = Object.values(groupedData);
 
-    return { items: groupedDataList, count: groupedDataList.length };
+    return {
+      items: groupedDataList,
+      count: groupedDataList.length,
+      total_brutto: groupedDataList.reduce((acc, item) => {
+        return acc + item.total_brutto;
+      }, 0),
+      total_price: groupedDataList.reduce((acc, item) => {
+        return acc + item.sum_price;
+      }, 0),
+    };
   } catch (err) {
-    return { items: [], count: 0 };
+    return { items: [], count: 0, total_brutto: 0, total_price: 0 };
   }
 }
 
@@ -714,8 +723,8 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
       </Taxation>
       <Valuation_item>
         <Weight_itm>
-          <Gross_weight_itm>${brutto}</Gross_weight_itm>
-          <Net_weight_itm>${netto}</Net_weight_itm>
+          <Gross_weight_itm>${brutto.toFixed(2)}</Gross_weight_itm>
+          <Net_weight_itm>${netto.toFixed(2)}</Net_weight_itm>
         </Weight_itm>
         <Total_cost_itm>0</Total_cost_itm>
         <Total_CIF_itm></Total_CIF_itm>
@@ -724,7 +733,9 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
         <Alpha_coeficient_of_apportionment></Alpha_coeficient_of_apportionment>
         <Item_Invoice>
           <Amount_national_currency></Amount_national_currency>
-          <Amount_foreign_currency>${amount}</Amount_foreign_currency>
+          <Amount_foreign_currency>${amount.toFixed(
+            2
+          )}</Amount_foreign_currency>
           <Currency_code>840</Currency_code>
           <Currency_name>
             <null/>
