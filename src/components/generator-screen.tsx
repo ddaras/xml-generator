@@ -23,11 +23,13 @@ export function GeneratorScreen({
 }) {
   const {
     refetch,
-    data = { items: [], count: 0 },
+    data = { items: [], count: 0, total_brutto: 0, total_price: 0 },
     isLoading,
   } = useQuery<{
     items: IItem[];
     count: number;
+    total_brutto: number;
+    total_price: number;
   }>(["previewData"], () => parseFile());
 
   const [currentSection, setCurrentSection] = React.useState(0); // 0 - upload, 1 - download
