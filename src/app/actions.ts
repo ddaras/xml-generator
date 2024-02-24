@@ -37,53 +37,11 @@ async function saveFile(file: File) {
   return blob;
 }
 
-export async function parseFile() {
-  try {
-    const blobList = await list();
-
-    const blobUrl =
-      blobList.blobs.find((x) => x.pathname.includes(".xlsx"))?.url ||
-      "unknown";
-
-    const res = await fetch(blobUrl);
-
-    const resArrayBuffer = await res.arrayBuffer();
-
-    const workSheetsFromFile = xlsx.parse(resArrayBuffer);
-
-    const items = workSheetsFromFile[1].data.slice(1);
-
-    const groupedData = groupByCodeCountryCodeTitle(items);
-    const groupedDataList = Object.values(groupedData);
-
-    return {
-      items: groupedDataList,
-      count: groupedDataList.length,
-      total_brutto: groupedDataList.reduce((acc, item) => {
-        return acc + item.total_brutto;
-      }, 0),
-      total_price: groupedDataList.reduce((acc, item) => {
-        return acc + item.sum_price;
-      }, 0),
-    };
-  } catch (err) {
-    return { items: [], count: 0, total_brutto: 0, total_price: 0 };
-  }
-}
-
-export interface IItem {
-  code: string;
-  country_code: string;
-  titles: string[];
-  total_qty: number;
-  total_brutto: number;
-  total_netto: number;
-  sum_price: number;
-}
-
 function groupByCodeCountryCodeTitle(data: any[][]): Record<string, IItem> {
   // Sort data by code first
-  const sortedData = data.sort((a, b) => a[0].localeCompare(b[0]));
+  const sortedData = data
+    .filter((x) => x.length > 0)
+    .sort((a, b) => a[0].localeCompare(b[0]));
 
   return sortedData.reduce((acc: any, item) => {
     const country_code =
@@ -142,6 +100,50 @@ function groupByCodeCountryCodeTitle(data: any[][]): Record<string, IItem> {
 
     return acc;
   }, {});
+}
+
+export async function parseFile() {
+  try {
+    const blobList = await list();
+
+    const blobUrl =
+      blobList.blobs.find((x) => x.pathname.includes(".xlsx"))?.url ||
+      "unknown";
+
+    const res = await fetch(blobUrl);
+
+    const resArrayBuffer = await res.arrayBuffer();
+
+    const workSheetsFromFile = xlsx.parse(resArrayBuffer);
+
+    const items = workSheetsFromFile[1].data.slice(1);
+
+    const groupedData = groupByCodeCountryCodeTitle(items);
+    const groupedDataList = Object.values(groupedData);
+
+    return {
+      items: groupedDataList,
+      count: groupedDataList.length,
+      total_brutto: groupedDataList.reduce((acc, item) => {
+        return acc + item.total_brutto;
+      }, 0),
+      total_price: groupedDataList.reduce((acc, item) => {
+        return acc + item.sum_price;
+      }, 0),
+    };
+  } catch (err) {
+    return { items: [], count: 0, total_brutto: 0, total_price: 0 };
+  }
+}
+
+export interface IItem {
+  code: string;
+  country_code: string;
+  titles: string[];
+  total_qty: number;
+  total_brutto: number;
+  total_netto: number;
+  sum_price: number;
 }
 
 export async function buildXML(data: { items: IItem[]; count: number }) {
