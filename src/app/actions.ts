@@ -424,13 +424,13 @@ export async function buildXML(data: {
   <Valuation>
     <Calculation_working_mode>1</Calculation_working_mode>
     <Weight>
-        <Gross_weight>${data.total_brutto}</Gross_weight>
+        <Gross_weight>${data.total_brutto.toFixed(2)}</Gross_weight>
     </Weight>
     <Total_cost>0.0</Total_cost>
     <Total_CIF>12345</Total_CIF>
     <Gs_Invoice>
         <Amount_national_currency>12345</Amount_national_currency>
-        <Amount_foreign_currency>${data.total_price}</Amount_foreign_currency>
+        <Amount_foreign_currency>${data.total_price.toFixed(2)}</Amount_foreign_currency>
         <Currency_code>840</Currency_code>
         <Currency_name/>
         <Currency_rate>1.2345</Currency_rate>
@@ -481,8 +481,8 @@ export async function buildXML(data: {
         <Currency_rate>0.0</Currency_rate>
     </Gs_deduction>
     <Total>
-        <Total_invoice>${data.total_price}</Total_invoice>
-        <Total_weight>${data.total_brutto}</Total_weight>
+        <Total_invoice>${data.total_price.toFixed(2)}</Total_invoice>
+        <Total_weight>${data.total_brutto.toFixed(2)}</Total_weight>
     </Total>
   </Valuation>
   `;
