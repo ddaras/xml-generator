@@ -146,7 +146,12 @@ export interface IItem {
   sum_price: number;
 }
 
-export async function buildXML(data: { items: IItem[]; count: number }) {
+export async function buildXML(data: {
+  items: IItem[];
+  count: number;
+  total_brutto: number;
+  total_price: number;
+}) {
   let xmlStr = /*xml*/ `
 <ASYCUDA id="5337710">
   <Assessment_notice>
@@ -415,68 +420,69 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
       <null/>
     </Officer_name>
   </Transit>
+  
   <Valuation>
-    <Calculation_working_mode></Calculation_working_mode>
+    <Calculation_working_mode>1</Calculation_working_mode>
     <Weight>
-      <Gross_weight></Gross_weight>
+        <Gross_weight>${data.total_brutto}</Gross_weight>
     </Weight>
-    <Total_cost></Total_cost>
-    <Total_CIF></Total_CIF>
+    <Total_cost>0.0</Total_cost>
+    <Total_CIF>12345</Total_CIF>
     <Gs_Invoice>
-      <Amount_national_currency></Amount_national_currency>
-      <Amount_foreign_currency></Amount_foreign_currency>
-      <Currency_code></Currency_code>
-      <Currency_name></Currency_name>
-      <Currency_rate></Currency_rate>
+        <Amount_national_currency>12345</Amount_national_currency>
+        <Amount_foreign_currency>${data.total_price}</Amount_foreign_currency>
+        <Currency_code>840</Currency_code>
+        <Currency_name/>
+        <Currency_rate>1.2345</Currency_rate>
     </Gs_Invoice>
     <Gs_external_freight>
-      <Amount_national_currency></Amount_national_currency>
-      <Amount_foreign_currency></Amount_foreign_currency>
-      <Currency_code>
-        <null/>
-      </Currency_code>
-      <Currency_name></Currency_name>
-      <Currency_rate></Currency_rate>
+        <Amount_national_currency>0.0</Amount_national_currency>
+        <Amount_foreign_currency/>
+        <Currency_code>
+            <null/>
+        </Currency_code>
+        <Currency_name>No foreign currency</Currency_name>
+        <Currency_rate>0</Currency_rate>
     </Gs_external_freight>
     <Gs_internal_freight>
-      <Amount_national_currency></Amount_national_currency>
-      <Amount_foreign_currency></Amount_foreign_currency>
-      <Currency_code>
-        <null/>
-      </Currency_code>
-      <Currency_name></Currency_name>
-      <Currency_rate></Currency_rate>
+        <Amount_national_currency>0.0</Amount_national_currency>
+        <Amount_foreign_currency>0</Amount_foreign_currency>
+        <Currency_code>
+            <null/>
+        </Currency_code>
+        <Currency_name>No foreign currency</Currency_name>
+        <Currency_rate>0</Currency_rate>
     </Gs_internal_freight>
     <Gs_insurance>
-      <Amount_national_currency></Amount_national_currency>
-      <Amount_foreign_currency></Amount_foreign_currency>
-      <Currency_code>
-        <null/>
-      </Currency_code>
-      <Currency_name></Currency_name>
-      <Currency_rate></Currency_rate>
+        <Amount_national_currency>0.0</Amount_national_currency>
+        <Amount_foreign_currency/>
+        <Currency_code>
+            <null/>
+        </Currency_code>
+        <Currency_name>No foreign currency</Currency_name>
+        <Currency_rate>0.0</Currency_rate>
     </Gs_insurance>
     <Gs_other_cost>
-      <Amount_national_currency></Amount_national_currency>
-      <Amount_foreign_currency></Amount_foreign_currency>
-      <Currency_code>
-        <null/>
-      </Currency_code>
-      <Currency_name></Currency_name>
-      <Currency_rate></Currency_rate>
+        <Amount_national_currency>0.0</Amount_national_currency>
+        <Amount_foreign_currency/>
+        <Currency_code>
+            <null/>
+        </Currency_code>
+        <Currency_name>No foreign currency</Currency_name>
+        <Currency_rate>0.0</Currency_rate>
     </Gs_other_cost>
     <Gs_deduction>
-      <Amount_national_currency></Amount_national_currency>
-      <Amount_foreign_currency></Amount_foreign_currency>
-      <Currency_code>
-        <null/>
-      </Currency_code>
-      <Currency_name></Currency_name>
-      <Currency_rate></Currency_rate>
+        <Amount_national_currency>0.0</Amount_national_currency>
+        <Amount_foreign_currency/>
+        <Currency_code>
+            <null/>
+        </Currency_code>
+        <Currency_name>No foreign currency</Currency_name>
+        <Currency_rate>0.0</Currency_rate>
     </Gs_deduction>
     <Total>
-      <Total_invoice></Total_invoice>
-      <Total_weight></Total_weight>
+        <Total_invoice>${data.total_price}</Total_invoice>
+        <Total_weight>${data.total_brutto}</Total_weight>
     </Total>
   </Valuation>
   `;
@@ -502,8 +508,8 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
         <Kind_of_packages_name>სხვა / Others</Kind_of_packages_name>
       </Packages>
       <IncoTerms>
-        <Code></Code>
-        <Place></Place>
+        <Code>CIP</Code>
+        <Place>თბილისი</Place>
       </IncoTerms>
       <Tarification>
         <Tarification_data>
@@ -565,7 +571,7 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
           <Suppplementary_unit_quantity/>
         </Supplementary_unit>
         <Valuation_method_code>1</Valuation_method_code>
-        <Value_item />
+        <Value_item>0.00+0.00+0.00+0.00-0.00</Value_item>
         <Attached_doc_item>
           <null/>
         </Attached_doc_item>
@@ -609,20 +615,20 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
         <null/>
       </Free_text_2>
       <Taxation>
-        <Item_taxes_amount></Item_taxes_amount>
+        <Item_taxes_amount>12345</Item_taxes_amount>
         <Item_taxes_guaranted_amount/>
-        <Item_taxes_mode_of_payment></Item_taxes_mode_of_payment>
+        <Item_taxes_mode_of_payment>1</Item_taxes_mode_of_payment>
         <Counter_of_normal_mode_of_payment/>
         <Displayed_item_taxes_amount/>
         <Taxation_line>
-          <Duty_tax_code></Duty_tax_code>
-          <Duty_tax_Base></Duty_tax_Base>
-          <Duty_tax_rate></Duty_tax_rate>
-          <Duty_tax_amount></Duty_tax_amount>
-          <Duty_tax_MP></Duty_tax_MP>
-          <Duty_tax_Type_of_calculation>
-            <null/>
-          </Duty_tax_Type_of_calculation>
+            <Duty_tax_code>28</Duty_tax_code>
+            <Duty_tax_Base>12345</Duty_tax_Base>
+            <Duty_tax_rate>12.345</Duty_tax_rate>
+            <Duty_tax_amount>1234.5</Duty_tax_amount>
+            <Duty_tax_MP>1</Duty_tax_MP>
+            <Duty_tax_Type_of_calculation>
+                <null/>
+            </Duty_tax_Type_of_calculation>
         </Taxation_line>
         <Taxation_line>
           <Duty_tax_code>
@@ -729,65 +735,59 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
           <Net_weight_itm>${netto.toFixed(2)}</Net_weight_itm>
         </Weight_itm>
         <Total_cost_itm>0</Total_cost_itm>
-        <Total_CIF_itm></Total_CIF_itm>
+        <Total_CIF_itm>12345</Total_CIF_itm>
         <Rate_of_adjustement>1</Rate_of_adjustement>
-        <Statistical_value></Statistical_value>
-        <Alpha_coeficient_of_apportionment></Alpha_coeficient_of_apportionment>
+        <Statistical_value>12345</Statistical_value>
+        <Alpha_coeficient_of_apportionment>0.12345</Alpha_coeficient_of_apportionment>
         <Item_Invoice>
-          <Amount_national_currency></Amount_national_currency>
+          <Amount_national_currency>12345</Amount_national_currency>
           <Amount_foreign_currency>${amount.toFixed(
             2
           )}</Amount_foreign_currency>
-          <Currency_code />
-          <Currency_name>
-            <null/>
-          </Currency_name>
-          <Currency_rate>0</Currency_rate>
+          <Currency_code>840</Currency_code>
+          <Currency_name>No foreign currency</Currency_name>
+          <Currency_rate>1.2345</Currency_rate>
         </Item_Invoice>
         <item_external_freight>
-          <Amount_national_currency/>
-          <Amount_foreign_currency>0.0</Amount_foreign_currency>
-          <Currency_code>
-            <null/>
-          </Currency_code>
-          <Currency_name>No foreign currency</Currency_name>
-          <Currency_rate>0</Currency_rate>
+            <Amount_national_currency>0.0</Amount_national_currency>
+            <Amount_foreign_currency>0.0</Amount_foreign_currency>
+            <Currency_code/>
+            <Currency_name>No foreign currency</Currency_name>
+            <Currency_rate>0</Currency_rate>
         </item_external_freight>
         <item_internal_freight>
-          <Amount_national_currency>0</Amount_national_currency>
-          <Amount_foreign_currency>0.0</Amount_foreign_currency>
-          <Currency_code>
-            <null/>
-          </Currency_code>
-          <Currency_name>No foreign currency</Currency_name>
-          <Currency_rate>0</Currency_rate>
+            <Amount_national_currency>0.0</Amount_national_currency>
+            <Amount_foreign_currency>0.0</Amount_foreign_currency>
+            <Currency_code/>
+            <Currency_name>No foreign currency</Currency_name>
+            <Currency_rate>0</Currency_rate>
         </item_internal_freight>
         <item_insurance>
-          <Amount_national_currency>0</Amount_national_currency>
-          <Amount_foreign_currency>0.0</Amount_foreign_currency>
-          <Currency_code>
-            <null/>
-          </Currency_code>
-          <Currency_name>No foreign currency</Currency_name>
-          <Currency_rate>0</Currency_rate>
+            <Amount_national_currency>0.0</Amount_national_currency>
+            <Amount_foreign_currency>0.0</Amount_foreign_currency>
+            <Currency_code>
+                <null/>
+            </Currency_code>
+            <Currency_name>No foreign currency</Currency_name>
+            <Currency_rate>0</Currency_rate>
         </item_insurance>
         <item_other_cost>
-          <Amount_national_currency/>
-          <Amount_foreign_currency>0.0</Amount_foreign_currency>
-          <Currency_code>
-            <null/>
-          </Currency_code>
-          <Currency_name>No foreign currency</Currency_name>
-          <Currency_rate>0</Currency_rate>
+            <Amount_national_currency>0.0</Amount_national_currency>
+            <Amount_foreign_currency>0.0</Amount_foreign_currency>
+            <Currency_code>
+                <null/>
+            </Currency_code>
+            <Currency_name>No foreign currency</Currency_name>
+            <Currency_rate>0</Currency_rate>
         </item_other_cost>
         <item_deduction>
-          <Amount_national_currency/>
-          <Amount_foreign_currency>0.0</Amount_foreign_currency>
-          <Currency_code>
-            <null/>
-          </Currency_code>
-          <Currency_name>No foreign currency</Currency_name>
-          <Currency_rate>0</Currency_rate>
+            <Amount_national_currency>0.0</Amount_national_currency>
+            <Amount_foreign_currency>0.0</Amount_foreign_currency>
+            <Currency_code>
+                <null/>
+            </Currency_code>
+            <Currency_name>No foreign currency</Currency_name>
+            <Currency_rate>0</Currency_rate>
         </item_deduction>
         <Market_valuer>
           <Rate/>

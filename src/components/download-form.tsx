@@ -10,7 +10,12 @@ import { useMutation } from "react-query";
 export function DownloadForm({
   data,
 }: {
-  data: { items: IItem[]; count: number };
+  data: {
+    items: IItem[];
+    count: number;
+    total_brutto: number;
+    total_price: number;
+  };
 }) {
   const handleDownload = (url: string) => {
     var pom = document.createElement("a");
