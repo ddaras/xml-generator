@@ -146,7 +146,12 @@ export interface IItem {
   sum_price: number;
 }
 
-export async function buildXML(data: { items: IItem[]; count: number }) {
+export async function buildXML(data: {
+  items: IItem[];
+  count: number;
+  total_brutto: number;
+  total_price: number;
+}) {
   let xmlStr = /*xml*/ `
 <ASYCUDA id="5337710">
   <Assessment_notice>
@@ -304,8 +309,8 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
       </Situation>
     </Delivery_terms>
     <Border_office>
-      <Code>69601</Code>
-      <Name>სგპ  "სარფი" / BCP "Sarpi"</Name>
+      <Code></Code>
+      <Name></Name>
     </Border_office>
     <Place_of_loading>
       <Code>
@@ -318,7 +323,7 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
         <null/>
       </Country>
     </Place_of_loading>
-    <Location_of_goods>SGP99</Location_of_goods>
+    <Location_of_goods></Location_of_goods>
   </Transport>
   <Financial>
     <Financial_transaction>
@@ -351,7 +356,7 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
     <Amounts>
       <Total_manual_taxes/>
       <Global_taxes>0</Global_taxes>
-      <Totals_taxes>1520.5</Totals_taxes>
+      <Totals_taxes>0</Totals_taxes>
     </Amounts>
     <Guarantee>
       <Name>
@@ -418,13 +423,13 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
   <Valuation>
     <Calculation_working_mode>1</Calculation_working_mode>
     <Weight>
-      <Gross_weight>1</Gross_weight>
+      <Gross_weight>0</Gross_weight>
     </Weight>
-    <Total_cost>1</Total_cost>
-    <Total_CIF>1</Total_CIF>
+    <Total_cost>0</Total_cost>
+    <Total_CIF>0</Total_CIF>
     <Gs_Invoice>
-      <Amount_national_currency>1</Amount_national_currency>
-      <Amount_foreign_currency>1</Amount_foreign_currency>
+      <Amount_national_currency>0</Amount_national_currency>
+      <Amount_foreign_currency>0</Amount_foreign_currency>
       <Currency_code>840</Currency_code>
       <Currency_name>No foreign currency</Currency_name>
       <Currency_rate>2.6588</Currency_rate>
