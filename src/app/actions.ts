@@ -176,15 +176,15 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
     <Global_tax_item/>
   </Global_taxes>
   <Property>
-    <Sad_flow></Sad_flow>
+    <Sad_flow>I</Sad_flow>
     <Forms>
-      <Number_of_the_form></Number_of_the_form>
+      <Number_of_the_form>1</Number_of_the_form>
       <Total_number_of_forms></Total_number_of_forms>
     </Forms>
     <Nbers>
       <Number_of_loading_lists/>
-      <Total_number_of_items></Total_number_of_items>
-      <Total_number_of_packages></Total_number_of_packages>
+      <Total_number_of_items>${data.items.length}</Total_number_of_items>
+      <Total_number_of_packages>${data.items.length}</Total_number_of_packages>
     </Nbers>
     <Place_of_declaration>
       <null/>
@@ -194,8 +194,8 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
   </Property>
   <Identification>
     <Office_segment>
-      <Customs_clearance_office_code></Customs_clearance_office_code>
-      <Customs_Clearance_office_name></Customs_Clearance_office_name>
+      <Customs_clearance_office_code>11111</Customs_clearance_office_code>
+      <Customs_Clearance_office_name>გეზი თბილისი / CCZ Tbilisi</Customs_Clearance_office_name>
     </Office_segment>
     <Type>
       <Type_of_declaration>იმ</Type_of_declaration>
@@ -271,10 +271,10 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
           <null/>
         </Destination_country_region>
       </Destination>
-      <Country_of_origin_name></Country_of_origin_name>
+      <Country_of_origin_name>MANY</Country_of_origin_name>
     </Country>
-    <Value_details></Value_details>
-    <CAP></CAP>
+    <Value_details>0</Value_details>
+    <CAP>1</CAP>
     <Additional_information>
       <null/>
     </Additional_information>
@@ -297,15 +297,15 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
     </Means_of_transport>
     <Container_flag></Container_flag>
     <Delivery_terms>
-      <Code></Code>
-      <Place></Place>
+      <Code>CIP</Code>
+      <Place>თბილისი</Place>
       <Situation>
         <null/>
       </Situation>
     </Delivery_terms>
     <Border_office>
-      <Code></Code>
-      <Name></Name>
+      <Code>69601</Code>
+      <Name>სგპ  "სარფი" / BCP "Sarpi"</Name>
     </Border_office>
     <Place_of_loading>
       <Code>
@@ -318,16 +318,16 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
         <null/>
       </Country>
     </Place_of_loading>
-    <Location_of_goods></Location_of_goods>
+    <Location_of_goods>SGP99</Location_of_goods>
   </Transport>
   <Financial>
     <Financial_transaction>
-      <code1></code1>
-      <code2></code2>
+      <code1>2</code1>
+      <code2>1</code2>
     </Financial_transaction>
     <Bank>
-      <Code></Code>
-      <Name></Name>
+      <Code>0</Code>
+      <Name>.</Name>
       <Branch>
         <null/>
       </Branch>
@@ -347,17 +347,17 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
     <Deffered_payment_reference>
       <null/>
     </Deffered_payment_reference>
-    <Mode_of_payment></Mode_of_payment>
+    <Mode_of_payment>ნაღდი</Mode_of_payment>
     <Amounts>
       <Total_manual_taxes/>
-      <Global_taxes></Global_taxes>
-      <Totals_taxes></Totals_taxes>
+      <Global_taxes>0</Global_taxes>
+      <Totals_taxes>1520.5</Totals_taxes>
     </Amounts>
     <Guarantee>
       <Name>
         <null/>
       </Name>
-      <Amount></Amount>
+      <Amount>0</Amount>
       <Date/>
       <Excluded_country>
         <Code>
@@ -416,22 +416,22 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
     </Officer_name>
   </Transit>
   <Valuation>
-    <Calculation_working_mode></Calculation_working_mode>
+    <Calculation_working_mode>1</Calculation_working_mode>
     <Weight>
-      <Gross_weight></Gross_weight>
+      <Gross_weight>1</Gross_weight>
     </Weight>
-    <Total_cost></Total_cost>
-    <Total_CIF></Total_CIF>
+    <Total_cost>1</Total_cost>
+    <Total_CIF>1</Total_CIF>
     <Gs_Invoice>
-      <Amount_national_currency></Amount_national_currency>
-      <Amount_foreign_currency></Amount_foreign_currency>
-      <Currency_code></Currency_code>
-      <Currency_name></Currency_name>
-      <Currency_rate></Currency_rate>
+      <Amount_national_currency>1</Amount_national_currency>
+      <Amount_foreign_currency>1</Amount_foreign_currency>
+      <Currency_code>840</Currency_code>
+      <Currency_name>No foreign currency</Currency_name>
+      <Currency_rate>2.6588</Currency_rate>
     </Gs_Invoice>
     <Gs_external_freight>
-      <Amount_national_currency></Amount_national_currency>
-      <Amount_foreign_currency></Amount_foreign_currency>
+      <Amount_national_currency>0</Amount_national_currency>
+      <Amount_foreign_currency>0</Amount_foreign_currency>
       <Currency_code>
         <null/>
       </Currency_code>
@@ -609,17 +609,17 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
         <null/>
       </Free_text_2>
       <Taxation>
-        <Item_taxes_amount></Item_taxes_amount>
+        <Item_taxes_amount>1</Item_taxes_amount>
         <Item_taxes_guaranted_amount/>
-        <Item_taxes_mode_of_payment></Item_taxes_mode_of_payment>
+        <Item_taxes_mode_of_payment>1</Item_taxes_mode_of_payment>
         <Counter_of_normal_mode_of_payment/>
         <Displayed_item_taxes_amount/>
         <Taxation_line>
-          <Duty_tax_code></Duty_tax_code>
-          <Duty_tax_Base></Duty_tax_Base>
-          <Duty_tax_rate></Duty_tax_rate>
-          <Duty_tax_amount></Duty_tax_amount>
-          <Duty_tax_MP></Duty_tax_MP>
+          <Duty_tax_code>1</Duty_tax_code>
+          <Duty_tax_Base>1</Duty_tax_Base>
+          <Duty_tax_rate>1</Duty_tax_rate>
+          <Duty_tax_amount>1</Duty_tax_amount>
+          <Duty_tax_MP>1</Duty_tax_MP>
           <Duty_tax_Type_of_calculation>
             <null/>
           </Duty_tax_Type_of_calculation>
@@ -729,20 +729,20 @@ export async function buildXML(data: { items: IItem[]; count: number }) {
           <Net_weight_itm>${netto.toFixed(2)}</Net_weight_itm>
         </Weight_itm>
         <Total_cost_itm>0</Total_cost_itm>
-        <Total_CIF_itm></Total_CIF_itm>
+        <Total_CIF_itm>1</Total_CIF_itm>
         <Rate_of_adjustement>1</Rate_of_adjustement>
-        <Statistical_value></Statistical_value>
-        <Alpha_coeficient_of_apportionment></Alpha_coeficient_of_apportionment>
+        <Statistical_value>1</Statistical_value>
+        <Alpha_coeficient_of_apportionment>1</Alpha_coeficient_of_apportionment>
         <Item_Invoice>
-          <Amount_national_currency></Amount_national_currency>
+          <Amount_national_currency>1</Amount_national_currency>
           <Amount_foreign_currency>${amount.toFixed(
             2
           )}</Amount_foreign_currency>
-          <Currency_code />
+          <Currency_code>840</Currency_code>
           <Currency_name>
             <null/>
           </Currency_name>
-          <Currency_rate>0</Currency_rate>
+          <Currency_rate>1</Currency_rate>
         </Item_Invoice>
         <item_external_freight>
           <Amount_national_currency/>
