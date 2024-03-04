@@ -302,8 +302,8 @@ export async function buildXML(data: {
     </Means_of_transport>
     <Container_flag></Container_flag>
     <Delivery_terms>
-      <Code>CIP</Code>
-      <Place>თბილისი</Place>
+      <Code></Code>
+      <Place></Place>
       <Situation>
         <null/>
       </Situation>

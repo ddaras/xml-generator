@@ -1,5 +1,23 @@
 [
   {
+    "name": "",
+    "code": "UN",
+    "capital": "",
+    "region": "",
+    "currency": {
+      "code": "",
+      "name": "",
+      "symbol": ""
+    },
+    "language": {
+      "code": "",
+      "name": ""
+    },
+    "flag": "",
+    "dialling_code": "",
+    "isoCode": "999"
+  },
+  {
     "name": "Afghanistan",
     "code": "AF",
     "capital": "Kabul",
