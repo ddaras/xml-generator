@@ -203,8 +203,8 @@ export async function buildXML(data: {
       <Customs_Clearance_office_name>გეზი თბილისი / CCZ Tbilisi</Customs_Clearance_office_name>
     </Office_segment>
     <Type>
-      <Type_of_declaration>იმ</Type_of_declaration>
-      <Declaration_gen_procedure_code>4</Declaration_gen_procedure_code>
+      <Type_of_declaration></Type_of_declaration>
+      <Declaration_gen_procedure_code></Declaration_gen_procedure_code>
       <Type_of_transit_document>
         <null/>
       </Type_of_transit_document>
@@ -527,9 +527,9 @@ export async function buildXML(data: {
             <null/>
           </Precision_4>
         </HScode>
-        <Preference_code>900</Preference_code>
-        <Extended_customs_procedure>4000</Extended_customs_procedure>
-        <National_customs_procedure>000</National_customs_procedure>
+        <Preference_code></Preference_code>
+        <Extended_customs_procedure></Extended_customs_procedure>
+        <National_customs_procedure></National_customs_procedure>
         <Quota_code>
           <null/>
         </Quota_code>
