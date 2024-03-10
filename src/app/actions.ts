@@ -151,7 +151,51 @@ export async function buildXML(data: {
   count: number;
   total_brutto: number;
   total_price: number;
+  mode: number;
 }) {
+  let mode = "";
+  let modeNumber = "";
+  let cap = "";
+  let preferenceCode = "";
+  let extendedCustomsProcedure = "";
+  let nationalCustomsProcedure = "";
+
+  switch (data.mode) {
+    case 1:
+      mode = "ექ";
+      modeNumber = "1";
+      cap = "";
+      preferenceCode = "";
+      extendedCustomsProcedure = "1000";
+      nationalCustomsProcedure = "001";
+      break;
+    case 2:
+      mode = "სხვ";
+      modeNumber = "7";
+      cap = "1";
+      preferenceCode = "900";
+      extendedCustomsProcedure = "7400";
+      nationalCustomsProcedure = "004";
+      break;
+    case 3:
+      mode = "რექ";
+      modeNumber = "1";
+      cap = "";
+      preferenceCode = "";
+      extendedCustomsProcedure = "1174";
+      nationalCustomsProcedure = "002";
+      break;
+
+    // import
+    default:
+      mode = "იმ";
+      modeNumber = "4";
+      cap = "1";
+      preferenceCode = "900";
+      extendedCustomsProcedure = "4000";
+      nationalCustomsProcedure = "000";
+  }
+
   let xmlStr = /*xml*/ `
 <ASYCUDA id="5337710">
   <Assessment_notice>
@@ -203,8 +247,8 @@ export async function buildXML(data: {
       <Customs_Clearance_office_name>გეზი თბილისი / CCZ Tbilisi</Customs_Clearance_office_name>
     </Office_segment>
     <Type>
-      <Type_of_declaration></Type_of_declaration>
-      <Declaration_gen_procedure_code></Declaration_gen_procedure_code>
+      <Type_of_declaration>${mode}</Type_of_declaration>
+      <Declaration_gen_procedure_code>${modeNumber}</Declaration_gen_procedure_code>
       <Type_of_transit_document>
         <null/>
       </Type_of_transit_document>
@@ -279,7 +323,7 @@ export async function buildXML(data: {
       <Country_of_origin_name>MANY</Country_of_origin_name>
     </Country>
     <Value_details>0</Value_details>
-    <CAP>1</CAP>
+    <CAP>${cap}</CAP>
     <Additional_information>
       <null/>
     </Additional_information>
@@ -527,9 +571,9 @@ export async function buildXML(data: {
             <null/>
           </Precision_4>
         </HScode>
-        <Preference_code></Preference_code>
-        <Extended_customs_procedure></Extended_customs_procedure>
-        <National_customs_procedure></National_customs_procedure>
+        <Preference_code>${preferenceCode}</Preference_code>
+        <Extended_customs_procedure>${extendedCustomsProcedure}</Extended_customs_procedure>
+        <National_customs_procedure>${nationalCustomsProcedure}</National_customs_procedure>
         <Quota_code>
           <null/>
         </Quota_code>
