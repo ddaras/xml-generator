@@ -1,6 +1,7 @@
 "use server";
 
 import { put, list, del } from "@vercel/blob";
+import { ObjectCannedACL, PutObjectCommand, S3 } from "@aws-sdk/client-s3";
 
 import { PREVIEW_TABLE_COLUMNS } from "@/constants";
 import fs from "fs";
@@ -8,6 +9,19 @@ import xlsx from "node-xlsx";
 import path from "path";
 import { create } from "xmlbuilder2";
 import COUNTRY_CODES from "../lib/country_codes.json";
+
+const REGION = "fra1";
+const BUCKET_NAME = "waikiki-xml";
+
+let space = new S3({
+  forcePathStyle: false, // Configures to use subdomain/virtual calling format.
+  endpoint: `https://${REGION}.digitaloceanspaces.com`,
+  region: "us-east-1", // aws specific, do not pay attention
+  credentials: {
+    accessKeyId: "DO00QX93EA7LAP36K89F",
+    secretAccessKey: "VUMCJ6eKL13Vx8l74ZL9vWUb8o2lWVOjFwu+EujIZ8c",
+  },
+});
 
 export async function uploadFile(prevState: any, formData: FormData) {
   const file = formData.get("file") as File;
@@ -22,19 +36,51 @@ export async function uploadFile(prevState: any, formData: FormData) {
 }
 
 async function saveFile(file: File) {
-  const data = await file.arrayBuffer();
+  // const data = await file.arrayBuffer();
 
-  const blobList = await list();
-
-  blobList.blobs.map((blob) => {
-    del(blob.url);
+  space.listObjectsV2({ Bucket: BUCKET_NAME }, function (err, data) {
+    if (err) {
+      console.log(err, err.stack); // an error occurred
+    } else {
+      (data?.Contents || []).map((fileObject) => {
+        space.deleteObject(
+          { Bucket: BUCKET_NAME, Key: fileObject.Key },
+          function (err, data) {
+            if (err) {
+              console.log(err, err.stack); // error
+            } else {
+              // deleted
+            }
+          }
+        );
+      });
+    }
   });
 
-  const blob = await put("doc.xlsx", data, {
-    access: "public",
-  });
+  const uploadParameters = {
+    Bucket: BUCKET_NAME,
+    Key: file.name,
+    Body: (await file.arrayBuffer()) as Buffer,
+    ACL: ObjectCannedACL.public_read,
+  };
 
-  return blob;
+  try {
+    await space.send(new PutObjectCommand(uploadParameters), {});
+  } catch (err) {
+    console.log("Error", err);
+  }
+
+  // const blobList = await list();
+
+  // blobList.blobs.map((blob) => {
+  //   del(blob.url);
+  // });
+
+  // const blob = await put("doc.xlsx", data, {
+  //   access: "public",
+  // });
+
+  // return blob;
 }
 
 function groupByCodeCountryCodeTitle(data: any[][]): Record<string, IItem> {
@@ -103,14 +149,21 @@ function groupByCodeCountryCodeTitle(data: any[][]): Record<string, IItem> {
 }
 
 export async function parseFile() {
+  // const blobList = await list();
+
+  // const blobUrl =
+  //   blobList.blobs.find((x) => x.pathname.includes(".xlsx"))?.url ||
+  //   "unknown";
+
   try {
-    const blobList = await list();
+    const data = await space.listObjectsV2({ Bucket: BUCKET_NAME });
 
-    const blobUrl =
-      blobList.blobs.find((x) => x.pathname.includes(".xlsx"))?.url ||
-      "unknown";
+    const fileKey =
+      (data?.Contents || []).find((x) => x.Key?.includes(".xlsx"))?.Key || "";
 
-    const res = await fetch(blobUrl);
+    const fileUrl = `https://${BUCKET_NAME}.${REGION}.cdn.digitaloceanspaces.com/${fileKey}`;
+
+    const res = await fetch(fileUrl);
 
     const resArrayBuffer = await res.arrayBuffer();
 
@@ -131,7 +184,7 @@ export async function parseFile() {
         return acc + item.sum_price;
       }, 0),
     };
-  } catch (err) {
+  } catch {
     return { items: [], count: 0, total_brutto: 0, total_price: 0 };
   }
 }
