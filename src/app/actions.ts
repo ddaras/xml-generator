@@ -38,7 +38,7 @@ export async function uploadFile(prevState: any, formData: FormData) {
 async function saveFile(file: File) {
   // const data = await file.arrayBuffer();
 
-  space.listObjectsV2({ Bucket: BUCKET_NAME }, function (err, data) {
+  await space.listObjectsV2({ Bucket: BUCKET_NAME }, function (err, data) {
     if (err) {
       console.log(err, err.stack); // an error occurred
     } else {
@@ -914,18 +914,33 @@ export async function buildXML(data: {
   const xml = doc.end({ prettyPrint: true });
 
   try {
-    const blobList = await list();
+    // const blobList = await list();
 
-    blobList.blobs.map((blob) => {
-      if (blob.pathname.includes(".xml")) {
-        del(blob.url);
-      }
-    });
+    // blobList.blobs.map((blob) => {
+    //   if (blob.pathname.includes(".xml")) {
+    //     del(blob.url);
+    //   }
+    // });
 
-    const blob = await put("doc.xml", xml, {
-      access: "public",
-    });
+    // const blob = await put("doc.xml", xml, {
+    //   access: "public",
+    // });
 
-    return blob;
-  } catch (err) {}
+    const fileName = "doc.xml";
+
+    const uploadParameters = {
+      Bucket: BUCKET_NAME,
+      Key: fileName,
+      Body: xml,
+      ACL: ObjectCannedACL.public_read,
+    };
+
+    await space.send(new PutObjectCommand(uploadParameters), {});
+
+    return {
+      url: `https://${BUCKET_NAME}.${REGION}.cdn.digitaloceanspaces.com/${fileName}`,
+    };
+  } catch (err) {
+    return undefined;
+  }
 }
