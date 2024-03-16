@@ -42,17 +42,8 @@ async function saveFile(file: File) {
     if (err) {
       console.log(err, err.stack); // an error occurred
     } else {
-      (data?.Contents || []).map((fileObject) => {
-        space.deleteObject(
-          { Bucket: BUCKET_NAME, Key: fileObject.Key },
-          function (err, data) {
-            if (err) {
-              console.log(err, err.stack); // error
-            } else {
-              // deleted
-            }
-          }
-        );
+      (data?.Contents || []).map(async (fileObject) => {
+        await space.deleteObject({ Bucket: BUCKET_NAME, Key: fileObject.Key });
       });
     }
   });
@@ -926,28 +917,7 @@ export async function buildXML(data: {
     //   access: "public",
     // });
 
-    await space.listObjectsV2({ Bucket: BUCKET_NAME }, function (err, data) {
-      if (err) {
-        console.log(err, err.stack); // an error occurred
-      } else {
-        (data?.Contents || []).map((fileObject) => {
-          if (fileObject?.Key || "".includes(".xml")) {
-            space.deleteObject(
-              { Bucket: BUCKET_NAME, Key: fileObject.Key },
-              function (err, data) {
-                if (err) {
-                  console.log(err, err.stack); // error
-                } else {
-                  // deleted
-                }
-              }
-            );
-          }
-        });
-      }
-    });
-
-    const fileName = "doc.xml";
+    const fileName = `doc-${Date.now()}.xml`;
 
     const uploadParameters = {
       Bucket: BUCKET_NAME,
