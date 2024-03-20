@@ -87,7 +87,7 @@ export function DownloadForm({
           </RadioGroup>
         </div>
 
-        <div className="flex items-center gap-4 mt-6 flex-wrap">
+        <div className="flex flex-col items-center gap-4 mt-6">
           {[...Array(Math.ceil(data.items.length / SPLIT_BY))].map(
             (chunk, i) => {
               const copyItems = [...data.items];
@@ -107,8 +107,23 @@ export function DownloadForm({
                   disabled={isLoading}
                   className="shadow-lg"
                 >
-                  <DownloadIcon className="mr-2 h-5 w-5" />
-                  {`XML (${chunkItems.length})`}
+                  {/* <DownloadIcon className="mr-2 h-5 w-5" /> */}
+
+                  <div className="flex flex-col">
+                    <div>{`XML${i + 1} (${chunkItems.length} აითემი)`}</div>
+                    <div>
+                      ღირ:{" "}
+                      {`${chunkItems
+                        .reduce((acc, item) => item.sum_price + acc, 0)
+                        .toLocaleString()}`}
+                      {/* </div>
+                    <div> */}{" "}
+                      ბრუტ:{" "}
+                      {`${chunkItems
+                        .reduce((acc, item) => item.total_brutto + acc, 0)
+                        .toLocaleString()}`}
+                    </div>
+                  </div>
                 </Button>
               );
             }
