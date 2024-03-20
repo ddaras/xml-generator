@@ -190,12 +190,12 @@ export interface IItem {
   sum_price: number;
 }
 
-export async function buildXML(data: {
+export async function buildXML({
+  items,
+  type,
+}: {
   items: IItem[];
-  count: number;
-  total_brutto: number;
-  total_price: number;
-  mode: number;
+  type: number;
 }) {
   let mode = "";
   let modeNumber = "";
@@ -204,7 +204,7 @@ export async function buildXML(data: {
   let extendedCustomsProcedure = "";
   let nationalCustomsProcedure = "";
 
-  switch (data.mode) {
+  switch (type) {
     case 1:
       mode = "ექ";
       modeNumber = "1";
@@ -276,8 +276,8 @@ export async function buildXML(data: {
     </Forms>
     <Nbers>
       <Number_of_loading_lists/>
-      <Total_number_of_items>${data.items.length}</Total_number_of_items>
-      <Total_number_of_packages>${data.items.length}</Total_number_of_packages>
+      <Total_number_of_items>${items.length}</Total_number_of_items>
+      <Total_number_of_packages>${items.length}</Total_number_of_packages>
     </Nbers>
     <Place_of_declaration>
       <null/>
@@ -574,7 +574,7 @@ export async function buildXML(data: {
   </Valuation>
   `;
 
-  data.items.map((item) => {
+  items.map((item) => {
     const countryCode = item["country_code"];
     const code = item["code"].replaceAll(" ", "");
     const titles = item["titles"];
@@ -831,7 +831,7 @@ export async function buildXML(data: {
           <Amount_foreign_currency>${amount.toFixed(
             2
           )}</Amount_foreign_currency>
-          <Currency_code>840</Currency_code>
+          <Currency_code></Currency_code>
           <Currency_name>
             <null/>
           </Currency_name>

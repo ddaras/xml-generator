@@ -117,7 +117,7 @@ export function PreviewTable({
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:to-slate-950"></div>
 
         {data.count > 0 && (
-          <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 shadow-2xl">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 shadow-2xl">
             <DownloadForm data={data} />
           </div>
         )}
