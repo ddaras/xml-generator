@@ -203,6 +203,7 @@ export async function buildXML({
   let preferenceCode = "";
   let extendedCustomsProcedure = "";
   let nationalCustomsProcedure = "";
+  let sadFlow = "";
 
   switch (type) {
     case 1:
@@ -212,6 +213,7 @@ export async function buildXML({
       preferenceCode = "";
       extendedCustomsProcedure = "1000";
       nationalCustomsProcedure = "001";
+      sadFlow = "E";
       break;
     case 2:
       mode = "სხვ";
@@ -220,6 +222,7 @@ export async function buildXML({
       preferenceCode = "900";
       extendedCustomsProcedure = "7400";
       nationalCustomsProcedure = "004";
+      sadFlow = "I";
       break;
     case 3:
       mode = "რექ";
@@ -228,6 +231,7 @@ export async function buildXML({
       preferenceCode = "";
       extendedCustomsProcedure = "1174";
       nationalCustomsProcedure = "002";
+      sadFlow = "E";
       break;
     case 4:
       mode = "იმ";
@@ -236,6 +240,7 @@ export async function buildXML({
       preferenceCode = "900";
       extendedCustomsProcedure = "4400";
       nationalCustomsProcedure = "000";
+      sadFlow = "I";
       break;
 
     // import
@@ -246,6 +251,7 @@ export async function buildXML({
       preferenceCode = "900";
       extendedCustomsProcedure = "4000";
       nationalCustomsProcedure = "000";
+      sadFlow = "I";
   }
 
   let xmlStr = /*xml*/ `
@@ -277,7 +283,7 @@ export async function buildXML({
     <Global_tax_item/>
   </Global_taxes>
   <Property>
-    <Sad_flow>I</Sad_flow>
+    <Sad_flow>${sadFlow}</Sad_flow>
     <Forms>
       <Number_of_the_form>1</Number_of_the_form>
       <Total_number_of_forms></Total_number_of_forms>
