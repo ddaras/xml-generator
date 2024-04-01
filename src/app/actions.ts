@@ -229,6 +229,14 @@ export async function buildXML({
       extendedCustomsProcedure = "1174";
       nationalCustomsProcedure = "002";
       break;
+    case 4:
+      mode = "იმ";
+      modeNumber = "4";
+      cap = "1";
+      preferenceCode = "900";
+      extendedCustomsProcedure = "4400";
+      nationalCustomsProcedure = "000";
+      break;
 
     // import
     default:

@@ -84,6 +84,10 @@ export function DownloadForm({
               <RadioGroupItem value="3" id="r4" />
               <Label htmlFor="r4">რეექსპორტი</Label>
             </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="4" id="r5" />
+              <Label htmlFor="r5">იმპორტი-ოქროს სია</Label>
+            </div>
           </RadioGroup>
         </div>
 
