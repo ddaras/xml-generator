@@ -44,12 +44,16 @@ export function PreviewTable({
         <p className="my-4 text-center text-sm opacity-60">
           ბრუტო ჯამში:{" "}
           <span className="font-bold">
-            {data.total_brutto.toLocaleString()}
+            {typeof data.total_brutto === "number" &&
+              data.total_brutto.toLocaleString()}
           </span>
         </p>
         <p className="my-4 text-center text-sm opacity-60">
           ღირ. ჯამში:{" "}
-          <span className="font-bold">{data.total_price.toLocaleString()}</span>
+          <span className="font-bold">
+            {typeof data.total_price === "number" &&
+              data.total_price.toLocaleString()}
+          </span>
         </p>
       </div>
 
@@ -63,7 +67,7 @@ export function PreviewTable({
                     key={col.idx}
                     className={twMerge(
                       clsx(
-                        "",
+                        "truncate",
                         { "text-right": col?.align === "right" },
                         { "text-center": col?.align === "center" }
                       )
@@ -96,7 +100,7 @@ export function PreviewTable({
                         key={col}
                         className={twMerge(
                           clsx(
-                            "",
+                            "truncate",
                             {
                               "text-right": isFloat,
                             },
