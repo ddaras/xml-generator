@@ -686,9 +686,7 @@ export async function buildXML({
           COUNTRY_CODES.find((x) => x.isoCode === countryCode)?.code || "-"
         }</Country_of_origin_region>
         <Description_of_goods>${titles.join(", ")}</Description_of_goods>
-        <Commercial_Description>
-          ${qty} ერთეული
-        </Commercial_Description>
+        <Commercial_Description>${qty} ერთეული</Commercial_Description>
       </Goods_description>
       <Previous_doc>
         <Summary_declaration>
