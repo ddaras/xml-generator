@@ -687,7 +687,7 @@ export async function buildXML({
         }</Country_of_origin_region>
         <Description_of_goods>${titles.join(", ")}</Description_of_goods>
         <Commercial_Description>
-          <null/>
+          ${qty} ერთეული
         </Commercial_Description>
       </Goods_description>
       <Previous_doc>
